@@ -1,8 +1,6 @@
-// Vercel serverless function that proxies /api/openai/* to api.openai.com.
-// Runs on Node.js (Fluid Compute). The OpenAI API key stays server-side —
-// the client never receives it and never needs to send Authorization.
-
-export const config = { runtime: "nodejs" };
+// Vercel serverless function that proxies all /api/openai/* requests to
+// api.openai.com. Routed here via vercel.json rewrites. The OpenAI API key
+// stays on the server — the client never receives or sends it.
 
 export default async function handler(request: Request): Promise<Response> {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -18,14 +16,27 @@ export default async function handler(request: Request): Promise<Response> {
     );
   }
 
+  // request.url may contain the original path (before vercel.json rewrite)
+  // or the destination path. Handle both: strip the /api/openai prefix and
+  // forward whatever path remains.
   const url = new URL(request.url);
-  const upstreamPath = url.pathname.replace(/^\/api\/openai/, "");
+  const rawPath = url.pathname;
+  let upstreamPath = rawPath.replace(/^\/api\/openai/, "");
+  if (!upstreamPath || upstreamPath === "/") {
+    // Fall back to x-forwarded-path or the raw URL if rewrite stripped it.
+    const forwarded =
+      request.headers.get("x-forwarded-uri") ||
+      request.headers.get("x-vercel-forwarded-uri") ||
+      "";
+    upstreamPath = forwarded.replace(/^\/api\/openai/, "");
+  }
   if (!upstreamPath || upstreamPath === "/") {
     return Response.json(
       { error: { message: "Missing upstream path." } },
       { status: 400 },
     );
   }
+
   const upstreamUrl = `https://api.openai.com${upstreamPath}${url.search}`;
 
   const headers = new Headers(request.headers);

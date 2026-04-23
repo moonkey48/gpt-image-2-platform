@@ -1,7 +1,5 @@
-// Returns whether the server has an OpenAI API key configured.
-// Only reports a boolean — the key itself is never sent to the client.
-
-export const config = { runtime: "nodejs" };
+// Returns whether the server has OPENAI_API_KEY configured. The key value
+// itself is never sent to the client.
 
 export default async function handler(): Promise<Response> {
   return Response.json(

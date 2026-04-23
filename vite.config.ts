@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
   const statusMiddleware: PluginOption = {
     name: "dev-api-status",
     configureServer(server) {
-      server.middlewares.use("/api/_status", (_req, res) => {
+      server.middlewares.use("/api/status", (_req, res) => {
         res.setHeader("content-type", "application/json");
         res.setHeader("cache-control", "no-store");
         res.end(JSON.stringify({ configured: apiKey.length > 0 }));

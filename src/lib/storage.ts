@@ -24,7 +24,7 @@ export function saveParams<T>(params: T): void {
  */
 export async function fetchKeyStatus(): Promise<boolean> {
   try {
-    const res = await fetch("/api/_status", { cache: "no-store" });
+    const res = await fetch("/api/status", { cache: "no-store" });
     if (!res.ok) return false;
     const data = (await res.json()) as { configured?: boolean };
     return !!data.configured;
