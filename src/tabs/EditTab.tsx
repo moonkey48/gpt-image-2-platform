@@ -157,6 +157,7 @@ export function EditTab({
                 accept="image/png"
                 hint="투명 영역 = 교체할 영역"
                 disabled={isGenerating}
+                compress={false}
               />
             </div>
 

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useToast } from "../contexts/ToastContext";
+import { compressImage } from "../lib/image-compress";
 
 interface StoredImage {
   file: File;
@@ -82,7 +83,7 @@ export function MultiImageUpload({
     return true;
   };
 
-  const addFiles = (list: FileList | null) => {
+  const addFiles = async (list: FileList | null) => {
     if (!list || list.length === 0) return;
     const incoming = Array.from(list).filter(validate);
     if (incoming.length === 0) return;
@@ -92,7 +93,17 @@ export function MultiImageUpload({
       addToast(`최대 ${maxImages}개의 이미지만 업로드할 수 있습니다.`, "warning");
       return;
     }
-    onChange([...files, ...incoming]);
+
+    // Compress before adding to state so Vercel's 4.5MB multipart body
+    // limit is never hit even with 10 references.
+    try {
+      const compressed = await Promise.all(
+        incoming.map((f) => compressImage(f)),
+      );
+      onChange([...files, ...compressed]);
+    } catch {
+      onChange([...files, ...incoming]);
+    }
   };
 
   const removeAt = (idx: number) => {

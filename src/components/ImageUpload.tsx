@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useToast } from "../contexts/ToastContext";
+import { compressImage } from "../lib/image-compress";
 
 interface Props {
   file: File | null;
@@ -7,6 +8,8 @@ interface Props {
   disabled?: boolean;
   accept?: string;
   hint?: string;
+  /** Skip client-side compression — use for masks that need PNG alpha. */
+  compress?: boolean;
 }
 
 const DEFAULT_ACCEPT = "image/png,image/jpeg,image/webp";
@@ -23,6 +26,7 @@ export function ImageUpload({
   disabled,
   accept = DEFAULT_ACCEPT,
   hint = "PNG, JPG, WEBP (최대 10MB)",
+  compress = true,
 }: Props) {
   const { addToast } = useToast();
   const [dragActive, setDragActive] = useState(false);
@@ -41,11 +45,16 @@ export function ImageUpload({
     return true;
   };
 
-  const pick = (files: FileList | null) => {
+  const pick = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
     const f = files[0];
     if (!validate(f)) return;
-    onSelect(f);
+    try {
+      const out = compress ? await compressImage(f) : f;
+      onSelect(out);
+    } catch {
+      onSelect(f);
+    }
   };
 
   if (!file) {
