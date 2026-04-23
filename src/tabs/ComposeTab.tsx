@@ -33,10 +33,10 @@ interface Props {
 }
 
 const composeRoleLabel = (index: number, total: number) => {
-  if (total <= 1) return "subject";
-  if (index === 0) return "subject";
-  if (index === 1) return "scene";
-  return `ref ${index}`;
+  if (total <= 1) return "주체";
+  if (index === 0) return "주체";
+  if (index === 1) return "배경";
+  return `참조 ${index}`;
 };
 
 export function ComposeTab({
@@ -68,15 +68,15 @@ export function ComposeTab({
 
   const handleGenerate = useCallback(async () => {
     if (!apiKey.trim()) {
-      addToast("Enter your OpenAI API key first.", "error");
+      addToast(".env.local에 VITE_OPENAI_API_KEY를 설정해주세요.", "error");
       return;
     }
     if (images.length < 2) {
-      addToast("Upload at least 2 images to compose.", "warning");
+      addToast("최소 2개 이상의 이미지를 업로드해주세요.", "warning");
       return;
     }
     if (!prompt.trim()) {
-      addToast("Please enter a composition prompt.", "warning");
+      addToast("합성 지시사항을 입력해주세요.", "warning");
       return;
     }
 
@@ -105,7 +105,7 @@ export function ComposeTab({
           setResults((prev) => [...prev, item]);
         },
       );
-      addToast("Composition complete.", "success", 2500);
+      addToast("이미지 합성이 완료되었습니다.", "success", 2500);
     } catch (err) {
       const e = err instanceof Error ? err : new Error(String(err));
       setError({ message: e.message, details: e.stack });
@@ -137,7 +137,7 @@ export function ComposeTab({
     );
     if (file) {
       onSendToEdit(file);
-      addToast("Result sent to Edit tab.", "info", 2500);
+      addToast("결과 이미지를 편집 탭으로 전송했습니다.", "info", 2500);
     }
   };
 
@@ -147,14 +147,14 @@ export function ComposeTab({
         <div className="input-panel">
           <div className="input-header input-header--compact">
             <p className="input-subtitle">
-              Combine multiple reference images into one composition.
+              여러 이미지를 조합해 하나의 합성 이미지를 만듭니다.
             </p>
           </div>
 
           <div className="input-content">
             <div className="input-section">
               <label className="input-label">
-                Reference images ({images.length}/10 · first = subject)
+                참조 이미지 ({images.length}/10 · 첫 번째 = 주체)
               </label>
               <MultiImageUpload
                 files={images}
@@ -166,29 +166,28 @@ export function ComposeTab({
             </div>
 
             <div className="tips-panel">
-              <span className="tips-panel-title">Composition tips</span>
+              <span className="tips-panel-title">합성 팁</span>
               <ul>
-                <li>Order matters: image 1 is the subject, image 2 the scene.</li>
+                <li>순서가 중요합니다. 이미지 1은 주체, 이미지 2는 배경입니다.</li>
                 <li>
-                  Reference roles explicitly in the prompt (e.g. "place image 1
-                  into image 2").
+                  프롬프트에 각 이미지의 역할을 명시하세요 (예: "이미지 1을 이미지 2의 배경에 합성").
                 </li>
                 <li>
-                  <code>gpt-image-2</code> always uses high input fidelity.
+                  <code>gpt-image-2</code>는 항상 높은 입력 충실도로 동작합니다.
                 </li>
               </ul>
             </div>
 
             <div className="input-section">
               <label htmlFor="compose-prompt" className="input-label">
-                Composition prompt
+                합성 지시사항
               </label>
               <textarea
                 id="compose-prompt"
                 className="input-field"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="e.g. Place the subject from image 1 into the scene of image 2, matching lighting and perspective."
+                placeholder="예: 이미지 1의 주체를 이미지 2의 배경에 자연스럽게 합성해주세요. 조명과 원근이 어울리도록."
                 rows={6}
                 disabled={isGenerating}
                 style={{ minHeight: "140px" }}
@@ -197,7 +196,7 @@ export function ComposeTab({
 
             <div className="input-section">
               <label className="input-label">
-                Number of images: {count}
+                생성할 이미지 개수: {count}개
               </label>
               <CountSlider
                 value={count}
@@ -223,10 +222,10 @@ export function ComposeTab({
               }
             >
               {isGenerating ? (
-                `Composing… (${progress.current}/${progress.total})`
+                `합성 중… (${progress.current}/${progress.total})`
               ) : (
                 <>
-                  <span>Compose images</span>
+                  <span>이미지 합성하기</span>
                   <span className="shortcut-hint">
                     <kbd>⌘</kbd>
                     <kbd>↵</kbd>
@@ -243,14 +242,14 @@ export function ComposeTab({
                   textAlign: "center",
                 }}
               >
-                est. ~${cost.toFixed(3)} ({params.quality} · {count})
+                예상 비용 약 ${cost.toFixed(3)} ({params.quality} · {count}개)
               </p>
             )}
 
             {results.length > 0 && !isGenerating && (
               <>
                 <button className="secondary-button" onClick={handleReset}>
-                  Compose again
+                  다시 합성하기
                 </button>
                 <button
                   className="download-all-button"
@@ -258,7 +257,7 @@ export function ComposeTab({
                     downloadAll(results, params.output_format, prefix)
                   }
                 >
-                  ⬇ Download all ({results.length})
+                  ⬇ 전체 다운로드 ({results.length}개)
                 </button>
               </>
             )}
@@ -271,7 +270,7 @@ export function ComposeTab({
               <ProgressBar
                 current={progress.current}
                 total={progress.total}
-                label="Composing"
+                label="이미지 합성 중"
               />
             )}
             {error && !isGenerating && <ErrorDisplay error={error} />}
@@ -283,7 +282,8 @@ export function ComposeTab({
                 loadingCount={
                   isGenerating ? Math.max(0, count - results.length) : 0
                 }
-                labelPrefix="Composition"
+                labelPrefix="합성"
+                loadingLabel="합성 중…"
                 onDownload={(item, i) =>
                   downloadItem(
                     item,
@@ -298,11 +298,11 @@ export function ComposeTab({
             {!isGenerating && results.length === 0 && !error && (
               <EmptyPreview
                 icon="🖼️"
-                text="Compose multiple images into a single output."
+                text="여러 이미지를 하나로 AI가 합성합니다."
                 steps={[
-                  "Upload 2–10 reference images",
-                  "Describe how they should combine",
-                  "Press ⌘+Enter or click Compose images",
+                  "2~10개의 참조 이미지를 업로드하세요",
+                  "어떻게 합성할지 설명해주세요",
+                  "⌘+Enter 또는 합성 버튼을 클릭하세요",
                 ]}
               />
             )}

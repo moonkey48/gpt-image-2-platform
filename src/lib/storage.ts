@@ -1,22 +1,4 @@
-const KEY_NAME = "gpt-image-test:openai-key";
-const LAST_PARAMS = "gpt-image-test:last-params";
-
-export function loadKey(): string {
-  try {
-    return localStorage.getItem(KEY_NAME) ?? "";
-  } catch {
-    return "";
-  }
-}
-
-export function saveKey(key: string): void {
-  try {
-    if (key) localStorage.setItem(KEY_NAME, key);
-    else localStorage.removeItem(KEY_NAME);
-  } catch {
-    // ignore
-  }
-}
+const LAST_PARAMS = "gpt-image-studio:last-params";
 
 export function loadParams<T>(fallback: T): T {
   try {
@@ -34,4 +16,9 @@ export function saveParams<T>(params: T): void {
   } catch {
     // ignore
   }
+}
+
+export function getApiKeyFromEnv(): string {
+  const raw = import.meta.env.VITE_OPENAI_API_KEY;
+  return typeof raw === "string" ? raw.trim() : "";
 }

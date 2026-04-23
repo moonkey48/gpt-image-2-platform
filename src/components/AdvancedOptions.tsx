@@ -29,14 +29,14 @@ export const DEFAULT_PARAMS: CommonParams = {
 };
 
 const MODELS: { id: ImageModel; sub: string }[] = [
-  { id: "gpt-image-2", sub: "latest" },
-  { id: "gpt-image-1.5", sub: "fast" },
-  { id: "gpt-image-1", sub: "legacy" },
-  { id: "gpt-image-1-mini", sub: "draft" },
+  { id: "gpt-image-2", sub: "최신" },
+  { id: "gpt-image-1.5", sub: "빠름" },
+  { id: "gpt-image-1", sub: "이전" },
+  { id: "gpt-image-1-mini", sub: "초안" },
 ];
 
 const SIZES: { id: ImageSize; label: string }[] = [
-  { id: "auto", label: "Auto" },
+  { id: "auto", label: "자동" },
   { id: "1024x1024", label: "1:1" },
   { id: "1536x1024", label: "3:2" },
   { id: "1024x1536", label: "2:3" },
@@ -102,11 +102,11 @@ export function AdvancedOptions({
   return (
     <details className="advanced-options">
       <summary>
-        Advanced options
+        고급 옵션
         <span className="advanced-options-badge">{badge}</span>
       </summary>
       <div className="advanced-options-content">
-        <Section label="Model">
+        <Section label="모델">
           <div className="option-grid option-grid-2">
             {MODELS.map((m) => (
               <button
@@ -123,7 +123,7 @@ export function AdvancedOptions({
           </div>
         </Section>
 
-        <Section label="Size / aspect">
+        <Section label="크기 / 비율">
           <div className="option-grid option-grid-3">
             {SIZES.map((s) => (
               <button
@@ -140,7 +140,7 @@ export function AdvancedOptions({
           </div>
         </Section>
 
-        <Section label="Quality">
+        <Section label="화질">
           <div className="option-grid option-grid-4">
             {QUALITIES.map((q) => (
               <button
@@ -156,7 +156,7 @@ export function AdvancedOptions({
           </div>
         </Section>
 
-        <Section label="Format">
+        <Section label="포맷">
           <div className="option-grid option-grid-3">
             {FORMATS.map((f) => (
               <button
@@ -172,7 +172,7 @@ export function AdvancedOptions({
           </div>
         </Section>
 
-        <Section label="Background">
+        <Section label="배경">
           <div className="option-grid option-grid-3">
             {BACKGROUNDS.map((b) => (
               <button
@@ -189,7 +189,7 @@ export function AdvancedOptions({
         </Section>
 
         {compressible && (
-          <Section label={`Compression (${params.output_compression}%)`}>
+          <Section label={`압축률 (${params.output_compression}%)`}>
             <input
               type="range"
               min={0}
@@ -208,8 +208,8 @@ export function AdvancedOptions({
           <Section
             label={
               fidelityAllowed
-                ? "Input fidelity"
-                : "Input fidelity (fixed · high)"
+                ? "입력 충실도"
+                : "입력 충실도 (고정 · high)"
             }
           >
             <div className="option-grid option-grid-2">

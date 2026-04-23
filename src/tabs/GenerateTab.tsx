@@ -37,7 +37,7 @@ export function GenerateTab({
 }: Props) {
   const { addToast } = useToast();
   const [prompt, setPrompt] = useState(
-    "A moody editorial photograph of a purple origami swan on wet asphalt at dusk, cinematic lighting",
+    "황혼녘 젖은 아스팔트 위에 놓인 보라색 종이 접기 백조, 시네마틱 조명의 감각적인 에디토리얼 사진",
   );
   const [count, setCount] = useState(1);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -49,11 +49,11 @@ export function GenerateTab({
 
   const handleGenerate = useCallback(async () => {
     if (!apiKey.trim()) {
-      addToast("Enter your OpenAI API key first.", "error");
+      addToast(".env.local에 VITE_OPENAI_API_KEY를 설정해주세요.", "error");
       return;
     }
     if (!prompt.trim()) {
-      addToast("Please enter a prompt.", "warning");
+      addToast("프롬프트를 입력해주세요.", "warning");
       return;
     }
 
@@ -80,7 +80,7 @@ export function GenerateTab({
           setResults((prev) => [...prev, item]);
         },
       );
-      addToast("Generation complete.", "success", 2500);
+      addToast("이미지 생성이 완료되었습니다.", "success", 2500);
     } catch (err) {
       const e = err instanceof Error ? err : new Error(String(err));
       setError({ message: e.message, details: e.stack });
@@ -112,7 +112,7 @@ export function GenerateTab({
     );
     if (file) {
       onSendToEdit(file);
-      addToast("Sent to Edit tab as reference.", "info", 2500);
+      addToast("편집 탭으로 참조 이미지를 전송했습니다.", "info", 2500);
     }
   };
 
@@ -122,21 +122,21 @@ export function GenerateTab({
         <div className="input-panel">
           <div className="input-header input-header--compact">
             <p className="input-subtitle">
-              Generate an image from a text prompt.
+              텍스트 프롬프트로 이미지를 생성합니다.
             </p>
           </div>
 
           <div className="input-content">
             <div className="input-section">
               <label htmlFor="gen-prompt" className="input-label">
-                Prompt
+                프롬프트
               </label>
               <textarea
                 id="gen-prompt"
                 className="input-field"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Describe the image you want to generate…"
+                placeholder="생성하고 싶은 이미지를 설명해주세요…"
                 rows={6}
                 disabled={isGenerating}
                 style={{ minHeight: "140px" }}
@@ -145,7 +145,7 @@ export function GenerateTab({
 
             <div className="input-section">
               <label className="input-label">
-                Number of images: {count}
+                생성할 이미지 개수: {count}개
               </label>
               <CountSlider
                 value={count}
@@ -168,10 +168,10 @@ export function GenerateTab({
               disabled={isGenerating || !prompt.trim()}
             >
               {isGenerating ? (
-                `Generating… (${progress.current}/${progress.total})`
+                `생성 중… (${progress.current}/${progress.total})`
               ) : (
                 <>
-                  <span>Generate</span>
+                  <span>이미지 생성하기</span>
                   <span className="shortcut-hint">
                     <kbd>⌘</kbd>
                     <kbd>↵</kbd>
@@ -188,14 +188,14 @@ export function GenerateTab({
                   textAlign: "center",
                 }}
               >
-                est. ~${cost.toFixed(3)} ({params.quality} · {count})
+                예상 비용 약 ${cost.toFixed(3)} ({params.quality} · {count}개)
               </p>
             )}
 
             {results.length > 0 && !isGenerating && (
               <>
                 <button className="secondary-button" onClick={handleReset}>
-                  Generate again
+                  다시 생성하기
                 </button>
                 <button
                   className="download-all-button"
@@ -203,7 +203,7 @@ export function GenerateTab({
                     downloadAll(results, params.output_format, prefix)
                   }
                 >
-                  ⬇ Download all ({results.length})
+                  ⬇ 전체 다운로드 ({results.length}개)
                 </button>
               </>
             )}
@@ -216,7 +216,7 @@ export function GenerateTab({
               <ProgressBar
                 current={progress.current}
                 total={progress.total}
-                label="Generating images"
+                label="이미지 생성 중"
               />
             )}
             {error && !isGenerating && <ErrorDisplay error={error} />}
@@ -228,7 +228,8 @@ export function GenerateTab({
                 loadingCount={
                   isGenerating ? Math.max(0, count - results.length) : 0
                 }
-                labelPrefix="Image"
+                labelPrefix="이미지"
+                loadingLabel="생성 중…"
                 onDownload={(item, i) =>
                   downloadItem(
                     item,
@@ -243,11 +244,11 @@ export function GenerateTab({
             {!isGenerating && results.length === 0 && !error && (
               <EmptyPreview
                 icon="✨"
-                text="Generate images from a text prompt."
+                text="텍스트로 AI 이미지를 생성합니다."
                 steps={[
-                  "Enter your OpenAI API key in the sidebar",
-                  "Write a prompt and pick the number of images",
-                  "Press ⌘+Enter or click Generate",
+                  ".env.local에 VITE_OPENAI_API_KEY가 설정되어 있는지 확인하세요",
+                  "프롬프트를 입력하고 이미지 개수를 선택하세요",
+                  "⌘+Enter 또는 생성 버튼을 클릭하세요",
                 ]}
               />
             )}

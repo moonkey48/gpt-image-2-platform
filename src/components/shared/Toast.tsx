@@ -22,7 +22,7 @@ export function Toast() {
             type="button"
             className="toast-close"
             onClick={() => removeToast(t.id)}
-            aria-label="Close notification"
+            aria-label="알림 닫기"
           >
             ×
           </button>

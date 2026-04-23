@@ -1,4 +1,4 @@
-import { ApiKeyField } from "./ApiKeyField";
+import { ApiKeyStatus } from "./ApiKeyStatus";
 
 export type MenuId = "generate" | "edit" | "compose";
 
@@ -9,9 +9,9 @@ export interface MenuItem {
 }
 
 export const MENU_ITEMS: MenuItem[] = [
-  { id: "generate", label: "Generate", icon: "✨" },
-  { id: "edit", label: "Edit image", icon: "🎨" },
-  { id: "compose", label: "Compose images", icon: "🖼️" },
+  { id: "generate", label: "텍스트로 이미지 생성", icon: "✨" },
+  { id: "edit", label: "이미지 편집", icon: "🎨" },
+  { id: "compose", label: "다중 이미지 합성", icon: "🖼️" },
 ];
 
 interface Props {
@@ -19,8 +19,7 @@ interface Props {
   onMenuChange: (id: MenuId) => void;
   collapsed: boolean;
   onToggle: () => void;
-  apiKey: string;
-  onApiKeyChange: (v: string) => void;
+  apiKeyPresent: boolean;
 }
 
 export function Sidebar({
@@ -28,15 +27,14 @@ export function Sidebar({
   onMenuChange,
   collapsed,
   onToggle,
-  apiKey,
-  onApiKeyChange,
+  apiKeyPresent,
 }: Props) {
   return (
     <>
       <aside className={`sidebar ${collapsed ? "sidebar--collapsed" : ""}`}>
         <div className="sidebar-header">
-          <h1 className="sidebar-title">GPT Image Test</h1>
-          <p className="sidebar-subtitle">OpenAI image generation</p>
+          <h1 className="sidebar-title">GPT 이미지 스튜디오</h1>
+          <p className="sidebar-subtitle">OpenAI 이미지 생성 · 편집 · 합성</p>
         </div>
 
         <nav className="sidebar-nav">
@@ -53,11 +51,11 @@ export function Sidebar({
           ))}
         </nav>
 
-        <ApiKeyField value={apiKey} onChange={onApiKeyChange} />
+        <ApiKeyStatus present={apiKeyPresent} />
 
         <div className="sidebar-footer">
-          <p>Local test tool</p>
-          <p>Requests proxied to api.openai.com</p>
+          <p>로컬 테스트 도구</p>
+          <p>요청은 api.openai.com으로 프록시됩니다</p>
         </div>
       </aside>
 
@@ -65,7 +63,7 @@ export function Sidebar({
         type="button"
         className={`sidebar-toggle ${collapsed ? "sidebar-toggle--collapsed" : ""}`}
         onClick={onToggle}
-        aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        aria-label={collapsed ? "사이드바 펼치기" : "사이드바 접기"}
       >
         {collapsed ? "▶" : "◀"}
       </button>

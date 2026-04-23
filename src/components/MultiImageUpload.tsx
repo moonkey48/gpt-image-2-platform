@@ -72,11 +72,11 @@ export function MultiImageUpload({
   const validate = (f: File): boolean => {
     const allowed = accept.split(",").map((s) => s.trim());
     if (!allowed.includes(f.type)) {
-      addToast(`${f.name} is not a supported format.`, "warning");
+      addToast(`${f.name}은(는) 지원하지 않는 형식입니다.`, "warning");
       return false;
     }
     if (f.size > 10 * 1024 * 1024) {
-      addToast(`${f.name} exceeds the 10MB limit.`, "warning");
+      addToast(`${f.name}이(가) 10MB 제한을 초과합니다.`, "warning");
       return false;
     }
     return true;
@@ -89,10 +89,7 @@ export function MultiImageUpload({
 
     const total = files.length + incoming.length;
     if (total > maxImages) {
-      addToast(
-        `Only ${maxImages} images can be added at a time.`,
-        "warning",
-      );
+      addToast(`최대 ${maxImages}개의 이미지만 업로드할 수 있습니다.`, "warning");
       return;
     }
     onChange([...files, ...incoming]);
@@ -109,9 +106,9 @@ export function MultiImageUpload({
   const total = stored.length;
   const defaultRoleLabel = useMemo(
     () => (index: number, n: number) => {
-      if (n === 1) return "image";
-      if (index === 0) return "main";
-      return `ref ${index}`;
+      if (n === 1) return "이미지";
+      if (index === 0) return "메인";
+      return `참조 ${index}`;
     },
     [],
   );
@@ -171,18 +168,18 @@ export function MultiImageUpload({
             </svg>
           </div>
           <p className="upload-text">
-            <span className="upload-text-bold">Click to upload images</span> or
-            drag &amp; drop
+            <span className="upload-text-bold">클릭하여 이미지 업로드</span> 또는
+            드래그 앤 드롭
           </p>
           <p className="upload-hint">
-            PNG, JPG, WEBP (up to {maxImages} images · 10MB each)
+            PNG, JPG, WEBP (최대 {maxImages}개 · 각 10MB)
           </p>
         </div>
       ) : (
         <div className="preview-container-multiple">
           <div className="preview-header">
             <p className="preview-count">
-              Selected: {stored.length} image{stored.length === 1 ? "" : "s"}
+              선택된 이미지: {stored.length}개
             </p>
             {!disabled && (
               <button
@@ -190,7 +187,7 @@ export function MultiImageUpload({
                 className="remove-all-button"
                 onClick={clearAll}
               >
-                Remove all
+                모두 제거
               </button>
             )}
           </div>
@@ -213,7 +210,7 @@ export function MultiImageUpload({
                         e.stopPropagation();
                         removeAt(i);
                       }}
-                      aria-label={`Remove ${img.file.name}`}
+                      aria-label={`${img.file.name} 제거`}
                     >
                       ×
                     </button>
@@ -236,7 +233,7 @@ export function MultiImageUpload({
                 tabIndex={0}
               >
                 <div className="add-more-icon">+</div>
-                <p className="add-more-text">Add image</p>
+                <p className="add-more-text">이미지 추가</p>
               </div>
             )}
           </div>

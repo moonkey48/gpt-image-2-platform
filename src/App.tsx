@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { ToastProvider } from "./contexts/ToastContext";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ToastProvider, useToast } from "./contexts/ToastContext";
 import { Toast } from "./components/shared/Toast";
 import { Sidebar, type MenuId } from "./components/Sidebar";
 import { GenerateTab } from "./tabs/GenerateTab";
@@ -9,10 +9,11 @@ import {
   DEFAULT_PARAMS,
   type CommonParams,
 } from "./components/AdvancedOptions";
-import { loadKey, loadParams, saveKey, saveParams } from "./lib/storage";
+import { getApiKeyFromEnv, loadParams, saveParams } from "./lib/storage";
 
 function AppShell() {
-  const [apiKey, setApiKey] = useState<string>(() => loadKey());
+  const { addToast } = useToast();
+  const apiKey = getApiKeyFromEnv();
   const [activeMenu, setActiveMenu] = useState<MenuId>("generate");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [params, setParams] = useState<CommonParams>(() =>
@@ -21,12 +22,20 @@ function AppShell() {
   const [pendingRef, setPendingRef] = useState<File | null>(null);
 
   useEffect(() => {
-    saveKey(apiKey);
-  }, [apiKey]);
-
-  useEffect(() => {
     saveParams(params);
   }, [params]);
+
+  const missingKeyWarned = useRef(false);
+  useEffect(() => {
+    if (!apiKey && !missingKeyWarned.current) {
+      missingKeyWarned.current = true;
+      addToast(
+        ".env.local에 VITE_OPENAI_API_KEY를 설정해주세요.",
+        "warning",
+        6000,
+      );
+    }
+  }, [apiKey, addToast]);
 
   const sendToEdit = useCallback((file: File) => {
     setPendingRef(file);
@@ -44,8 +53,7 @@ function AppShell() {
         onMenuChange={setActiveMenu}
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed((c) => !c)}
-        apiKey={apiKey}
-        onApiKeyChange={setApiKey}
+        apiKeyPresent={apiKey.length > 0}
       />
 
       <main

@@ -54,22 +54,22 @@ export function EditTab({
     if (!externalRef) return;
     setImage(externalRef);
     onConsumeExternalRef();
-    addToast("Reference image loaded.", "info", 2000);
+    addToast("참조 이미지를 불러왔습니다.", "info", 2000);
   }, [externalRef, onConsumeExternalRef, addToast]);
 
   const cost = estimateCost(params.model, params.quality, count);
 
   const handleGenerate = useCallback(async () => {
     if (!apiKey.trim()) {
-      addToast("Enter your OpenAI API key first.", "error");
+      addToast(".env.local에 VITE_OPENAI_API_KEY를 설정해주세요.", "error");
       return;
     }
     if (!image) {
-      addToast("Please upload an image to edit.", "warning");
+      addToast("편집할 이미지를 업로드해주세요.", "warning");
       return;
     }
     if (!prompt.trim()) {
-      addToast("Please enter an edit prompt.", "warning");
+      addToast("편집 지시사항을 입력해주세요.", "warning");
       return;
     }
 
@@ -99,7 +99,7 @@ export function EditTab({
           setResults((prev) => [...prev, item]);
         },
       );
-      addToast("Edit complete.", "success", 2500);
+      addToast("편집이 완료되었습니다.", "success", 2500);
     } catch (err) {
       const e = err instanceof Error ? err : new Error(String(err));
       setError({ message: e.message, details: e.stack });
@@ -132,7 +132,7 @@ export function EditTab({
     if (file) {
       setImage(file);
       onSendToEdit(file);
-      addToast("Result set as new input.", "info", 2000);
+      addToast("결과 이미지를 새 입력으로 설정했습니다.", "info", 2000);
     }
   };
 
@@ -142,13 +142,13 @@ export function EditTab({
         <div className="input-panel">
           <div className="input-header input-header--compact">
             <p className="input-subtitle">
-              Upload an image and describe how to transform it.
+              이미지를 업로드하고 원하는 편집 내용을 입력하세요.
             </p>
           </div>
 
           <div className="input-content">
             <div className="input-section">
-              <label className="input-label">Image</label>
+              <label className="input-label">이미지</label>
               <ImageUpload
                 file={image}
                 onSelect={setImage}
@@ -157,26 +157,26 @@ export function EditTab({
             </div>
 
             <div className="input-section">
-              <label className="input-label">Mask (optional, PNG)</label>
+              <label className="input-label">마스크 (선택, PNG)</label>
               <ImageUpload
                 file={mask}
                 onSelect={setMask}
                 accept="image/png"
-                hint="Transparent areas = regions to replace"
+                hint="투명 영역 = 교체할 영역"
                 disabled={isGenerating}
               />
             </div>
 
             <div className="input-section">
               <label htmlFor="edit-prompt" className="input-label">
-                Edit instructions
+                편집 지시사항
               </label>
               <textarea
                 id="edit-prompt"
                 className="input-field"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="e.g. Replace the background with a sunlit forest clearing, keep the subject identical"
+                placeholder="예: 배경을 햇살 가득한 숲속 공터로 바꿔주고, 주체는 그대로 유지해주세요."
                 rows={6}
                 disabled={isGenerating}
                 style={{ minHeight: "140px" }}
@@ -185,7 +185,7 @@ export function EditTab({
 
             <div className="input-section">
               <label className="input-label">
-                Number of images: {count}
+                생성할 이미지 개수: {count}개
               </label>
               <CountSlider
                 value={count}
@@ -209,10 +209,10 @@ export function EditTab({
               disabled={isGenerating || !image || !prompt.trim()}
             >
               {isGenerating ? (
-                `Editing… (${progress.current}/${progress.total})`
+                `편집 중… (${progress.current}/${progress.total})`
               ) : (
                 <>
-                  <span>Edit image</span>
+                  <span>이미지 편집하기</span>
                   <span className="shortcut-hint">
                     <kbd>⌘</kbd>
                     <kbd>↵</kbd>
@@ -229,14 +229,14 @@ export function EditTab({
                   textAlign: "center",
                 }}
               >
-                est. ~${cost.toFixed(3)} ({params.quality} · {count})
+                예상 비용 약 ${cost.toFixed(3)} ({params.quality} · {count}개)
               </p>
             )}
 
             {results.length > 0 && !isGenerating && (
               <>
                 <button className="secondary-button" onClick={handleReset}>
-                  Edit again
+                  다시 편집하기
                 </button>
                 <button
                   className="download-all-button"
@@ -244,7 +244,7 @@ export function EditTab({
                     downloadAll(results, params.output_format, prefix)
                   }
                 >
-                  ⬇ Download all ({results.length})
+                  ⬇ 전체 다운로드 ({results.length}개)
                 </button>
               </>
             )}
@@ -257,7 +257,7 @@ export function EditTab({
               <ProgressBar
                 current={progress.current}
                 total={progress.total}
-                label="Editing image"
+                label="이미지 편집 중"
               />
             )}
             {error && !isGenerating && <ErrorDisplay error={error} />}
@@ -269,7 +269,8 @@ export function EditTab({
                 loadingCount={
                   isGenerating ? Math.max(0, count - results.length) : 0
                 }
-                labelPrefix="Edit"
+                labelPrefix="편집"
+                loadingLabel="편집 중…"
                 onDownload={(item, i) =>
                   downloadItem(
                     item,
@@ -284,11 +285,11 @@ export function EditTab({
             {!isGenerating && results.length === 0 && !error && (
               <EmptyPreview
                 icon="🎨"
-                text="Edit an image with an AI prompt."
+                text="AI 프롬프트로 이미지를 편집합니다."
                 steps={[
-                  "Upload an image (and an optional PNG mask)",
-                  "Describe the edit you want to make",
-                  "Press ⌘+Enter or click Edit image",
+                  "이미지를 업로드하세요 (선택 사항: PNG 마스크)",
+                  "원하는 편집 내용을 입력하세요",
+                  "⌘+Enter 또는 편집 버튼을 클릭하세요",
                 ]}
               />
             )}

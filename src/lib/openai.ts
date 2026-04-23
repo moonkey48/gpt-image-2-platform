@@ -72,7 +72,7 @@ async function parseError(res: Response): Promise<string> {
     return `${res.status} ${res.statusText}: ${message}`;
   } catch {
     const text = await res.text().catch(() => "");
-    return `${res.status} ${res.statusText}: ${text || "Unknown error"}`;
+    return `${res.status} ${res.statusText}: ${text || "알 수 없는 오류"}`;
   }
 }
 
@@ -114,7 +114,7 @@ export async function editImage(
   req: EditRequest,
 ): Promise<ImageResponse> {
   if (!req.images.length) {
-    throw new Error("At least one input image is required for edits.");
+    throw new Error("편집하려면 최소 1개 이상의 이미지가 필요합니다.");
   }
 
   const form = new FormData();
@@ -178,7 +178,7 @@ export async function generateImageBatch(
     if (signal?.aborted) break;
     const res = await generateImage(apiKey, { ...req, n: 1 });
     const item = res.data?.[0];
-    if (!item) throw new Error("Empty response from API.");
+    if (!item) throw new Error("API 응답이 비어있습니다.");
     results.push(item);
     onProgress?.(i + 1, count, item);
   }
@@ -197,7 +197,7 @@ export async function editImageBatch(
     if (signal?.aborted) break;
     const res = await editImage(apiKey, { ...req, n: 1 });
     const item = res.data?.[0];
-    if (!item) throw new Error("Empty response from API.");
+    if (!item) throw new Error("API 응답이 비어있습니다.");
     results.push(item);
     onProgress?.(i + 1, count, item);
   }

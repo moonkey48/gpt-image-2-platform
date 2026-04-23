@@ -22,7 +22,7 @@ export function ImageUpload({
   onSelect,
   disabled,
   accept = DEFAULT_ACCEPT,
-  hint = "PNG, JPG, WEBP (max 10MB)",
+  hint = "PNG, JPG, WEBP (최대 10MB)",
 }: Props) {
   const { addToast } = useToast();
   const [dragActive, setDragActive] = useState(false);
@@ -31,11 +31,11 @@ export function ImageUpload({
   const validate = (f: File): boolean => {
     const allowed = accept.split(",").map((s) => s.trim());
     if (!allowed.includes(f.type)) {
-      addToast(`${f.name} is not a supported image format.`, "warning");
+      addToast(`${f.name}은(는) 지원하지 않는 형식입니다.`, "warning");
       return false;
     }
     if (f.size > 10 * 1024 * 1024) {
-      addToast(`${f.name} exceeds the 10MB limit.`, "warning");
+      addToast(`${f.name}이(가) 10MB 제한을 초과합니다.`, "warning");
       return false;
     }
     return true;
@@ -88,8 +88,8 @@ export function ImageUpload({
           </svg>
         </div>
         <p className="upload-text">
-          <span className="upload-text-bold">Click to upload an image</span> or
-          drag &amp; drop
+          <span className="upload-text-bold">클릭하여 이미지 업로드</span> 또는
+          드래그 앤 드롭
         </p>
         <p className="upload-hint">{hint}</p>
         <input
@@ -126,7 +126,7 @@ export function ImageUpload({
           className="remove-image-button"
           onClick={() => onSelect(null)}
         >
-          Remove
+          제거
         </button>
       )}
       <div

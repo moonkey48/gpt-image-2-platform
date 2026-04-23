@@ -4,7 +4,7 @@ interface Props {
   label?: string;
 }
 
-export function ProgressBar({ current, total, label = "Generating" }: Props) {
+export function ProgressBar({ current, total, label = "생성 중" }: Props) {
   const percentage = total > 0 ? (current / total) * 100 : 0;
   return (
     <div className="generation-progress">

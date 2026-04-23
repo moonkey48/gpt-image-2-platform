@@ -14,11 +14,11 @@ export function ErrorDisplay({ error }: Props) {
 
   return (
     <div className="error-preview">
-      <h4 className="error-title">Error</h4>
+      <h4 className="error-title">오류 발생</h4>
       <p className="error-message">{message}</p>
       {details && (
         <details className="error-details">
-          <summary>View details</summary>
+          <summary>상세 정보 보기</summary>
           <pre>{details}</pre>
         </details>
       )}

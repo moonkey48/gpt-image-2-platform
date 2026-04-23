@@ -7,6 +7,7 @@ interface Props {
   onDownload: (item: ImageItem, index: number) => void;
   onUseAsReference?: (item: ImageItem, index: number) => void;
   labelPrefix?: string;
+  loadingLabel?: string;
 }
 
 function mime(format: ImageFormat): string {
@@ -25,7 +26,8 @@ export function ResultGallery({
   loadingCount = 0,
   onDownload,
   onUseAsReference,
-  labelPrefix = "Image",
+  labelPrefix = "이미지",
+  loadingLabel = "생성 중…",
 }: Props) {
   return (
     <div className="results-gallery">
@@ -48,9 +50,9 @@ export function ResultGallery({
                   type="button"
                   className="reference-button"
                   onClick={() => onUseAsReference(item, index)}
-                  title="Send this image to the Edit tab as a reference"
+                  title="이 이미지를 편집 탭의 참조로 전송합니다"
                 >
-                  Use as reference
+                  참조로 사용
                 </button>
               )}
               <button
@@ -58,7 +60,7 @@ export function ResultGallery({
                 className="download-button"
                 onClick={() => onDownload(item, index)}
               >
-                Download
+                다운로드
               </button>
             </div>
           </div>
@@ -72,7 +74,7 @@ export function ResultGallery({
               <div className="loading-spinner" />
             </div>
             <div className="result-card-actions">
-              <span className="result-card-index">Generating…</span>
+              <span className="result-card-index">{loadingLabel}</span>
             </div>
           </div>
         ))}
