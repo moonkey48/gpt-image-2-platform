@@ -2,7 +2,7 @@
 // itself is never sent to the client.
 
 export const config = {
-  runtime: "nodejs22.x",
+  runtime: "nodejs",
 };
 
 export default async function handler(): Promise<Response> {

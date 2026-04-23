@@ -3,7 +3,7 @@
 // stays on the server — the client never receives or sends it.
 
 export const config = {
-  runtime: "nodejs22.x",
+  runtime: "nodejs",
   maxDuration: 300,
 };
 
