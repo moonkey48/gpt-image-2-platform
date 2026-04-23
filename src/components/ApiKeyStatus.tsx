@@ -1,24 +1,31 @@
+export type KeyStatus = "loading" | "ok" | "missing";
+
 interface Props {
-  present: boolean;
+  status: KeyStatus;
 }
 
-export function ApiKeyStatus({ present }: Props) {
+export function ApiKeyStatus({ status }: Props) {
+  const label =
+    status === "loading"
+      ? "상태 확인 중…"
+      : status === "ok"
+        ? "서버에 API 키가 설정되어 있습니다"
+        : "서버에 API 키가 설정되지 않았습니다";
+
+  const dot = status === "loading" ? "●" : status === "ok" ? "●" : "⚠";
+
   return (
     <div className="sidebar-api-key">
       <span className="sidebar-api-key-label">OpenAI API 키</span>
-      <div
-        className={`sidebar-api-key-status ${present ? "is-ok" : "is-missing"}`}
-      >
+      <div className={`sidebar-api-key-status is-${status}`}>
         <span className="sidebar-api-key-dot" aria-hidden>
-          {present ? "●" : "⚠"}
+          {dot}
         </span>
-        <span>
-          {present ? ".env에서 불러옴" : ".env.local 파일이 필요합니다"}
-        </span>
+        <span>{label}</span>
       </div>
       <p className="sidebar-api-key-hint">
-        프로젝트 루트의 <code>.env.local</code>에{" "}
-        <code>VITE_OPENAI_API_KEY</code>를 설정한 뒤 개발 서버를 다시 시작하세요.
+        키는 서버에만 보관됩니다. 로컬은 <code>.env.local</code>,
+        배포 환경은 Vercel 대시보드에서 <code>OPENAI_API_KEY</code>를 설정하세요.
       </p>
     </div>
   );

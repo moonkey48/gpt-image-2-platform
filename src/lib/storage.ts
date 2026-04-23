@@ -18,7 +18,17 @@ export function saveParams<T>(params: T): void {
   }
 }
 
-export function getApiKeyFromEnv(): string {
-  const raw = import.meta.env.VITE_OPENAI_API_KEY;
-  return typeof raw === "string" ? raw.trim() : "";
+/**
+ * Asks the server whether OPENAI_API_KEY is configured. The actual key is
+ * never sent to the client.
+ */
+export async function fetchKeyStatus(): Promise<boolean> {
+  try {
+    const res = await fetch("/api/_status", { cache: "no-store" });
+    if (!res.ok) return false;
+    const data = (await res.json()) as { configured?: boolean };
+    return !!data.configured;
+  } catch {
+    return false;
+  }
 }

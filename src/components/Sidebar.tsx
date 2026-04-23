@@ -1,4 +1,4 @@
-import { ApiKeyStatus } from "./ApiKeyStatus";
+import { ApiKeyStatus, type KeyStatus } from "./ApiKeyStatus";
 
 export type MenuId = "generate" | "edit" | "compose";
 
@@ -19,7 +19,7 @@ interface Props {
   onMenuChange: (id: MenuId) => void;
   collapsed: boolean;
   onToggle: () => void;
-  apiKeyPresent: boolean;
+  keyStatus: KeyStatus;
 }
 
 export function Sidebar({
@@ -27,7 +27,7 @@ export function Sidebar({
   onMenuChange,
   collapsed,
   onToggle,
-  apiKeyPresent,
+  keyStatus,
 }: Props) {
   return (
     <>
@@ -51,7 +51,7 @@ export function Sidebar({
           ))}
         </nav>
 
-        <ApiKeyStatus present={apiKeyPresent} />
+        <ApiKeyStatus status={keyStatus} />
 
         <div className="sidebar-footer">
           <p>로컬 테스트 도구</p>

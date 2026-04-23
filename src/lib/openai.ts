@@ -60,10 +60,6 @@ export interface ImageResponse {
 
 const BASE = "/api/openai/v1";
 
-function authHeaders(apiKey: string): Record<string, string> {
-  return { Authorization: `Bearer ${apiKey.trim()}` };
-}
-
 async function parseError(res: Response): Promise<string> {
   try {
     const data = await res.json();
@@ -77,7 +73,6 @@ async function parseError(res: Response): Promise<string> {
 }
 
 export async function generateImage(
-  apiKey: string,
   req: GenerateRequest,
 ): Promise<ImageResponse> {
   const body: Record<string, unknown> = {
@@ -101,7 +96,7 @@ export async function generateImage(
 
   const res = await fetch(`${BASE}/images/generations`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", ...authHeaders(apiKey) },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
 
@@ -110,7 +105,6 @@ export async function generateImage(
 }
 
 export async function editImage(
-  apiKey: string,
   req: EditRequest,
 ): Promise<ImageResponse> {
   if (!req.images.length) {
@@ -149,7 +143,6 @@ export async function editImage(
 
   const res = await fetch(`${BASE}/images/edits`, {
     method: "POST",
-    headers: authHeaders(apiKey),
     body: form,
   });
 
@@ -167,7 +160,6 @@ export function supportsInputFidelity(model: ImageModel): boolean {
  * bcave's batch pattern.
  */
 export async function generateImageBatch(
-  apiKey: string,
   req: Omit<GenerateRequest, "n">,
   count: number,
   onProgress?: (current: number, total: number, item: ImageItem) => void,
@@ -176,7 +168,7 @@ export async function generateImageBatch(
   const results: ImageItem[] = [];
   for (let i = 0; i < count; i++) {
     if (signal?.aborted) break;
-    const res = await generateImage(apiKey, { ...req, n: 1 });
+    const res = await generateImage({ ...req, n: 1 });
     const item = res.data?.[0];
     if (!item) throw new Error("API 응답이 비어있습니다.");
     results.push(item);
@@ -186,7 +178,6 @@ export async function generateImageBatch(
 }
 
 export async function editImageBatch(
-  apiKey: string,
   req: Omit<EditRequest, "n">,
   count: number,
   onProgress?: (current: number, total: number, item: ImageItem) => void,
@@ -195,7 +186,7 @@ export async function editImageBatch(
   const results: ImageItem[] = [];
   for (let i = 0; i < count; i++) {
     if (signal?.aborted) break;
-    const res = await editImage(apiKey, { ...req, n: 1 });
+    const res = await editImage({ ...req, n: 1 });
     const item = res.data?.[0];
     if (!item) throw new Error("API 응답이 비어있습니다.");
     results.push(item);

@@ -230,6 +230,12 @@
   border-color: #ffe5e7;
 }
 
+.sidebar-api-key-status.is-loading {
+  background: var(--color-bg-input);
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
 .sidebar-api-key-dot {
   font-size: 0.75rem;
   line-height: 1;

@@ -23,18 +23,12 @@ import {
 import { ResultGallery } from "../components/shared/ResultGallery";
 
 interface Props {
-  apiKey: string;
   params: CommonParams;
   onParamsChange: (p: CommonParams) => void;
   onSendToEdit: (file: File) => void;
 }
 
-export function GenerateTab({
-  apiKey,
-  params,
-  onParamsChange,
-  onSendToEdit,
-}: Props) {
+export function GenerateTab({ params, onParamsChange, onSendToEdit }: Props) {
   const { addToast } = useToast();
   const [prompt, setPrompt] = useState(
     "황혼녘 젖은 아스팔트 위에 놓인 보라색 종이 접기 백조, 시네마틱 조명의 감각적인 에디토리얼 사진",
@@ -48,10 +42,6 @@ export function GenerateTab({
   const cost = estimateCost(params.model, params.quality, count);
 
   const handleGenerate = useCallback(async () => {
-    if (!apiKey.trim()) {
-      addToast(".env.local에 VITE_OPENAI_API_KEY를 설정해주세요.", "error");
-      return;
-    }
     if (!prompt.trim()) {
       addToast("프롬프트를 입력해주세요.", "warning");
       return;
@@ -64,7 +54,6 @@ export function GenerateTab({
 
     try {
       await generateImageBatch(
-        apiKey,
         {
           prompt: prompt.trim(),
           model: params.model,
@@ -87,7 +76,7 @@ export function GenerateTab({
     } finally {
       setIsGenerating(false);
     }
-  }, [apiKey, prompt, count, params, addToast]);
+  }, [prompt, count, params, addToast]);
 
   useKeyboardShortcut("Enter", handleGenerate, {
     metaKey: true,
@@ -246,7 +235,7 @@ export function GenerateTab({
                 icon="✨"
                 text="텍스트로 AI 이미지를 생성합니다."
                 steps={[
-                  ".env.local에 VITE_OPENAI_API_KEY가 설정되어 있는지 확인하세요",
+                  "서버에 OPENAI_API_KEY가 설정되어 있는지 확인하세요",
                   "프롬프트를 입력하고 이미지 개수를 선택하세요",
                   "⌘+Enter 또는 생성 버튼을 클릭하세요",
                 ]}

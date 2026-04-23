@@ -24,7 +24,6 @@ import {
 import { ResultGallery } from "../components/shared/ResultGallery";
 
 interface Props {
-  apiKey: string;
   params: CommonParams;
   onParamsChange: (p: CommonParams) => void;
   externalRef: File | null;
@@ -40,7 +39,6 @@ const composeRoleLabel = (index: number, total: number) => {
 };
 
 export function ComposeTab({
-  apiKey,
   params,
   onParamsChange,
   externalRef,
@@ -67,10 +65,6 @@ export function ComposeTab({
   const cost = estimateCost(params.model, params.quality, count);
 
   const handleGenerate = useCallback(async () => {
-    if (!apiKey.trim()) {
-      addToast(".env.local에 VITE_OPENAI_API_KEY를 설정해주세요.", "error");
-      return;
-    }
     if (images.length < 2) {
       addToast("최소 2개 이상의 이미지를 업로드해주세요.", "warning");
       return;
@@ -87,7 +81,6 @@ export function ComposeTab({
 
     try {
       await editImageBatch(
-        apiKey,
         {
           prompt: prompt.trim(),
           model: params.model,
@@ -112,7 +105,7 @@ export function ComposeTab({
     } finally {
       setIsGenerating(false);
     }
-  }, [apiKey, images, prompt, count, params, addToast]);
+  }, [images, prompt, count, params, addToast]);
 
   useKeyboardShortcut("Enter", handleGenerate, {
     metaKey: true,
