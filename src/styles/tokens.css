@@ -1,0 +1,106 @@
+:root {
+  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+    'Apple SD Gothic Neo', Roboto, 'Noto Sans KR', 'Segoe UI', 'Malgun Gothic', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light;
+  color: #191f28;
+  background-color: #f4f4f5;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --color-primary: #3182f6;
+  --color-primary-hover: #1b64da;
+  --color-primary-dark: #1553b5;
+  --color-primary-light: #e8f3ff;
+  --color-primary-bg: rgba(49, 130, 246, 0.06);
+  --color-bg-page: #f4f4f5;
+  --color-bg-panel: #ffffff;
+  --color-bg-input: #f7f8fa;
+  --color-bg-elevated: #ffffff;
+  --color-border: #e5e8eb;
+  --color-border-hover: #d1d6db;
+  --color-text: #191f28;
+  --color-text-secondary: #333d4b;
+  --color-text-muted: #6b7684;
+  --color-text-dim: #8b95a1;
+  --color-error: #f04452;
+  --color-error-light: #ff6b6b;
+  --color-error-bg: #fff5f5;
+  --color-success: #00c781;
+  --color-success-light: #e1faf1;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+  --radius-pill: 100px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
+
+  --color-sidebar-bg-start: #ffffff;
+  --color-sidebar-bg-end: #ffffff;
+  --color-sidebar-text: #333d4b;
+  --color-sidebar-text-muted: #6b7684;
+  --color-sidebar-text-dim: #8b95a1;
+  --color-sidebar-border: #f2f4f6;
+  --color-accent-start: #3182f6;
+  --color-accent-end: #3182f6;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: inherit;
+  background-color: var(--color-bg-page);
+}
+
+a {
+  font-weight: 500;
+  color: var(--color-primary);
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--color-bg-input);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+kbd {
+  font-family: inherit;
+}
