@@ -179,11 +179,12 @@ export function MultiImageUpload({
             </svg>
           </div>
           <p className="upload-text">
-            <span className="upload-text-bold">클릭하여 이미지 업로드</span> 또는
-            드래그 앤 드롭
+            <span className="upload-text-bold">이미지 업로드</span>
+            <span className="upload-text-sep"> · </span>
+            클릭 또는 드래그
           </p>
           <p className="upload-hint">
-            PNG, JPG, WEBP (최대 {maxImages}개 · 각 10MB)
+            PNG · JPG · WEBP · 최대 {maxImages}개 (각 10MB)
           </p>
         </div>
       ) : (

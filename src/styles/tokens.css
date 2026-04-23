@@ -70,6 +70,9 @@ body,
 body {
   font-family: inherit;
   background-color: var(--color-bg-page);
+  /* Korean text should break between logical units, not mid-word. */
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 a {
@@ -95,7 +98,13 @@ button {
   transition: all 0.2s ease;
 }
 
-button:focus,
+/* Only show a focus ring when the user navigates via keyboard. Mouse
+   clicks shouldn't leave a lingering outline that duplicates the active
+   state of controls like menu items. */
+button:focus {
+  outline: none;
+}
+
 button:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
