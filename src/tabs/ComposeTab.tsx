@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useToast } from "../contexts/ToastContext";
 import { useKeyboardShortcut } from "../hooks/useKeyboardShortcut";
 import {
@@ -53,6 +53,13 @@ export function ComposeTab({
   const [results, setResults] = useState<ImageItem[]>([]);
   const [error, setError] = useState<ErrorInfo | null>(null);
   const [progress, setProgress] = useState({ current: 0, total: 0 });
+  const previewRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isGenerating && previewRef.current) {
+      previewRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [isGenerating]);
 
   useEffect(() => {
     if (!externalRef) return;
@@ -257,7 +264,7 @@ export function ComposeTab({
           </div>
         </div>
 
-        <div className="preview-panel">
+        <div className="preview-panel" ref={previewRef}>
           <div className="preview-content">
             {isGenerating && (
               <ProgressBar

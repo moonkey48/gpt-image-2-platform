@@ -20,9 +20,9 @@
 
 /* Left input panel */
 .input-panel {
-  width: 380px;
-  min-width: 380px;
-  max-width: 380px;
+  width: clamp(340px, 32vw, 420px);
+  min-width: clamp(340px, 32vw, 420px);
+  max-width: clamp(340px, 32vw, 420px);
   height: 100vh;
   background-color: var(--color-bg-panel);
   border-right: 1px solid #e5e8eb;
@@ -195,7 +195,7 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  padding: 2rem;
+  padding: clamp(1rem, 2vw, 2rem);
 }
 
 .preview-panel::-webkit-scrollbar {
@@ -1086,6 +1086,7 @@
   .layout-wrapper {
     flex-direction: column;
     height: auto;
+    min-height: 100dvh;
   }
 
   .input-panel {
@@ -1099,7 +1100,7 @@
 
   .preview-panel {
     height: auto;
-    min-height: 500px;
+    min-height: 60vh;
   }
 
   .results-gallery {
@@ -1118,7 +1119,11 @@
   }
 
   .input-header {
-    padding: 1.5rem 1rem 1rem;
+    padding: 1rem 1rem 0.75rem;
+  }
+
+  .input-header--compact {
+    padding: 1rem 1rem 0.25rem;
   }
 
   .input-title {
@@ -1134,8 +1139,66 @@
     gap: 1rem;
   }
 
-  .option-grid-3,
+  .result-card-image-wrapper {
+    aspect-ratio: auto;
+    max-height: 70vh;
+  }
+
+  .result-card-image {
+    object-fit: contain;
+    height: auto;
+  }
+
+  .option-grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  }
+
   .option-grid-4 {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  }
+
+  .option-btn {
+    min-height: 44px;
+  }
+
+  .primary-button,
+  .secondary-button,
+  .download-all-button {
+    min-height: 48px;
+  }
+
+  .download-all-button {
+    position: sticky;
+    bottom: 0.75rem;
+    z-index: 10;
+  }
+
+  .upload-area {
+    padding: 1.5rem 1rem;
+  }
+
+  .toast-container {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  .toast-item {
+    max-width: none;
+    width: 100%;
+  }
+
+  .count-slider {
+    height: 8px;
+  }
+
+  .count-slider::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  .count-slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
   }
 }

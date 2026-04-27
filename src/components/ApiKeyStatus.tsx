@@ -15,7 +15,7 @@ export function ApiKeyStatus({ status }: Props) {
   const dot = status === "loading" ? "●" : status === "ok" ? "●" : "⚠";
 
   return (
-    <div className="sidebar-api-key">
+    <div className={`sidebar-api-key sidebar-api-key--${status}`}>
       <span className="sidebar-api-key-label">OpenAI API 키</span>
       <div className={`sidebar-api-key-status is-${status}`}>
         <span className="sidebar-api-key-dot" aria-hidden>
